@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>발음 변환기 — V7 GUIDE</title>
+  <meta name="description" content="한국어 가사를 VOCALOID 일본어·영어 보이스가 한국어처럼 부르도록 변환해 복사하는 도구." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2302050b'/><path d='M22 18h14l14 46 14-46h14L56 86H44z' fill='%232f7dff'/></svg>" />
+</head>
+<body class="nosidebar">
+  <header class="topbar">
+    <a href="/" class="brand" aria-label="홈으로">
+      <svg viewBox="0 0 100 100" class="brand-v" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <span>V7&nbsp;GUIDE</span>
+    </a>
+    <nav class="topnav" aria-label="페이지">
+      <a href="/guide">가이드</a><a href="/converter" class="on">발음 변환기</a><a href="/game">단축키 게임</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="pagehead">
+      <p class="eyebrow">KOREAN → 日本語 / ENGLISH</p>
+      <h1 class="ph-title">한국어 발음 변환기</h1>
+      <p class="lead">한국어 가사를 입력하면, 일본어·영어 보이스가 한국어처럼 부르도록 비슷한 발음의 표기로 바꿔 줍니다. 결과를 복사해 VOCALOID7에 붙여넣으세요.</p>
+    </section>
+
+    <section class="sec" style="padding-top:40px">
+      <div class="conv">
+        <div>
+          <label class="lbl" for="kr">INPUT · 한국어 가사</label>
+          <textarea id="kr" placeholder="예) 사랑해 너를&#10;오늘 밤 별이 빛나"></textarea>
+          <div class="samples">
+            <button class="chip" data-sample="사랑해 너를">사랑해 너를</button>
+            <button class="chip" data-sample="오늘 밤 별이 빛나">오늘 밤 별이 빛나</button>
+            <button class="chip" data-sample="음악이 흐르는 거리">음악이 흐르는 거리</button>
+            <button class="chip" data-sample="꿈을 꾸는 너와 나">꿈을 꾸는 너와 나</button>
+          </div>
+          <div class="opts">
+            <div class="opt-row"><span>보이스 언어</span>
+              <div class="seg" data-opt="mode"><button data-v="ja" class="on">日本語</button><button data-v="en">English</button><button data-v="mix">혼합</button></div>
+            </div>
+            <div class="opt-row" id="row-en"><span>영어 표기</span>
+              <div class="seg" data-opt="en"><button data-v="spell" class="on">영어식 철자</button><button data-v="ph">발음기호</button></div>
+            </div>
+            <div class="opt-row" id="row-ja"><span>일본어 문자</span>
+              <div class="seg" data-opt="kana"><button data-v="hira" class="on">ひらがな</button><button data-v="kata">カタカナ</button></div>
+            </div>
+            <div class="opt-row"><span>받침 처리</span>
+              <div class="seg" data-opt="coda"><button data-v="soft" class="on">부드럽게</button><button data-v="clear">또렷하게</button></div>
+            </div>
+            <div class="opt-row"><span>옵션</span>
+              <label class="chk"><input type="checkbox" id="rules" checked /> 발음 규칙(연음·비음화)</label>
+              <label class="chk"><input type="checkbox" id="split" /> 받침을 별도 음표로</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="lbl">OUTPUT · 붙여넣을 가사</label>
+          <div id="out" class="out-big" aria-live="polite"></div>
+          <div class="copy-row">
+            <button class="btn primary" id="copy-lyric">가사 복사</button>
+            <button class="btn" id="copy-ph">발음기호 복사</button>
+          </div>
+          <div class="legend"><span><i style="background:var(--fg)"></i>일본어 표기</span><span><i style="background:var(--accent2)"></i>영어 표기</span><span>음표 하나 = 공백으로 구분된 한 덩어리</span></div>
+          <div id="tokens" class="tokens"></div>
+          <p class="note">각 칸을 누르면 그 음절만 복사됩니다. 영어 칸 아래 작은 글씨는 VOCALOID 영어 발음기호입니다.</p>
+        </div>
+      </div>
+
+      <h3 class="sub">VOCALOID7에 넣는 방법</h3>
+      <div class="cards c3">
+        <article class="card"><h3>1 · 음표 먼저</h3><p>한국어 한 글자당 음표 하나씩 그려 두세요. "받침을 별도 음표로"를 켰다면 받침 몫의 음표(짧게)도 추가합니다.</p></article>
+        <article class="card"><h3>2 · 일괄 삽입</h3><p>첫 음표를 선택하고 <kbd>Ctrl/⌘</kbd>+<kbd>I</kbd> (Insert Lyrics) → 복사한 가사 붙여넣기. 공백 단위로 음표에 차례대로 들어갑니다.</p></article>
+        <article class="card"><h3>3 · 발음기호로 다듬기</h3><p>영어 철자가 어색하게 들리면 <kbd>Ctrl/⌘</kbd>+<kbd>R</kbd>로 Phonetic Symbols Mode로 바꾸고, 칸 아래 발음기호를 해당 음표에 붙여넣으세요.</p></article>
+      </div>
+      <div class="tip"><b>알아두기</b> <u>혼합</u> 모드는 받침이 없고 일본어에 가까운 음절은 가나로, ㅓ·ㅡ나 받침(ㄱ·ㄷ·ㅂ·ㄹ·ㅁ)이 있는 음절은 영어로 표기합니다. 언어를 섞어 부를 수 있는 <b>다국어 보이스</b>에서만 동작합니다. 변환은 근사치이므로 마지막엔 귀로 확인하고 다듬어 주세요.</div>
+    </section>
+
+    <footer class="foot">
+      <svg viewBox="0 0 100 100" class="brand-v big" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <p>비공식 도구입니다. 변환 결과는 보이스뱅크·스타일에 따라 다르게 들릴 수 있습니다.</p>
+    </footer>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="converter.js"></script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>가이드 — V7 GUIDE</title>
+  <meta name="description" content="VOCALOID7 Editor 레퍼런스 매뉴얼(V7.0.0)을 한국어로 쉽고 간단하게 정리한 비공식 가이드." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23000'/><path d='M22 18h14l14 46 14-46h14L56 86H44z' fill='%23fff'/></svg>" />
+</head>
+<body>
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <a href="/" class="brand" aria-label="홈으로">
+      <svg viewBox="0 0 100 100" class="brand-v" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <span>V7&nbsp;GUIDE</span>
+    </a>
+    <nav class="topnav" aria-label="페이지">
+      <a href="/guide" class="on">가이드</a><a href="/converter">발음 변환기</a><a href="/game">단축키 게임</a>
+    </nav>
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3a7 7 0 1 0 4.2 12.6l5.1 5.1 1.4-1.4-5.1-5.1A7 7 0 0 0 10 3zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
+      <input id="search" type="search" placeholder="기능·단축키 검색  ( / )" autocomplete="off" />
+      <div id="search-results" class="search-results" hidden></div>
+    </div>
+    <button id="menu-btn" class="menu-btn" aria-label="메뉴 열기"><span></span><span></span></button>
+  </header>
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar" class="sidebar" aria-label="목차">
+    <p class="side-label">START</p>
+    <a href="#quickstart">01 빠른 시작</a>
+    <a href="#layout">02 화면 구성</a>
+    <p class="side-label">EDIT</p>
+    <a href="#track-editor">03 트랙 에디터</a>
+    <a href="#musical-editor">04 뮤지컬 에디터</a>
+    <a href="#lyrics">05 가사 입력</a>
+    <a href="#params">06 컨트롤 파라미터</a>
+    <a href="#inspector">07 인스펙터</a>
+    <p class="side-label">SOUND</p>
+    <a href="#effects">08 오디오 이펙트</a>
+    <a href="#wave-mixer">09 웨이브 에디터·믹서</a>
+    <a href="#export">10 저장·내보내기</a>
+    <p class="side-label">ADVANCED</p>
+    <a href="#daw">11 VST/AU·ARA·Cubase</a>
+    <a href="#lite">12 Editor Lite</a>
+    <a href="#prefs">13 환경설정</a>
+    <p class="side-label">REFERENCE</p>
+    <a href="#shortcuts">14 단축키</a>
+    <a href="#phonemes">15 발음기호표</a>
+    <a href="#faq">16 자주 묻는 질문</a>
+    <p class="side-label">TOOLS</p>
+    <a href="/converter">↗ 발음 변환기</a>
+    <a href="/game">↗ 단축키 게임</a>
+    <a href="/">↗ 홈</a>
+  </nav>
+
+  <main id="top">
+    <section class="pagehead">
+      <p class="eyebrow">REFERENCE MANUAL V7.0.0 · 한국어 요약</p>
+      <h1 class="ph-title">VOCALOID7 Editor 가이드</h1>
+      <p class="lead">처음 켜는 순간부터 WAV로 내보내기까지. 왼쪽 목차나 상단 검색(<kbd>/</kbd>)으로 바로 찾아가세요.</p>
+    </section>
+    <!-- 01 QUICK START -->
+    <section id="quickstart" class="sec">
+      <header class="sec-head"><span class="num">01</span><h2>빠른 시작</h2><p>설치 후 첫 노래를 만들기까지 다섯 단계.</p></header>
+      <ol class="steps">
+        <li><b>홈 화면에서 NEW PROJECT</b><p>에디터를 켜면 홈 창이 뜹니다. <kbd>NEW PROJECT</kbd>를 누르면 메인 창과 함께 <em>트랙 추가</em> 대화상자가 열립니다. 예제가 궁금하면 <kbd>OPEN DEMO SONG</kbd> (문서 폴더로 복사되어 열림).</p></li>
+        <li><b>트랙 추가 → 보이스 선택</b><p>트랙 종류 <em>VOCALOID</em>, 보이스(예: V7 / asa), 트랙 이름, 파트 길이(마디)를 정하고 <kbd>Add</kbd>. 나중에 <kbd>T</kbd> 키로 언제든 추가할 수 있습니다.</p></li>
+        <li><b>파트를 더블클릭 → 음표 그리기</b><p>트랙의 파트를 열면 하단에 뮤지컬 에디터(피아노롤)가 나타납니다. 연필 툴(<kbd>2</kbd>)로 드래그해 음표를 그립니다.</p></li>
+        <li><b>가사 입력</b><p>음표 선택 후 <kbd>Enter</kbd> 또는 더블클릭 → 가사 입력 → <kbd>Tab</kbd>으로 다음 음표. 여러 음표에 한꺼번에 넣으려면 <kbd>Ctrl/⌘</kbd>+<kbd>I</kbd> (Insert Lyrics).</p></li>
+        <li><b>재생하고 내보내기</b><p><kbd>Space</kbd>로 재생. 파트가 왼쪽부터 칠해지는 부분이 합성 완료된 구간입니다. 완성되면 <kbd>Ctrl/⌘</kbd>+<kbd>E</kbd> (Audio Mixdown)로 WAV/MP3 저장.</p></li>
+      </ol>
+      <div class="tip"><b>TIP</b> 파트는 통째로 합성됩니다. 10분 넘는 긴 파트는 합성이 끝날 때까지 들을 수 없으니, 가위 툴(<kbd>3</kbd>)로 짧게 나눠 작업하면 훨씬 빠릅니다.</div>
+    </section>
+
+    <!-- 02 LAYOUT -->
+    <section id="layout" class="sec">
+      <header class="sec-head"><span class="num">02</span><h2>화면 구성</h2><p>메인 창은 다섯 구역으로 나뉩니다.</p></header>
+      <div class="layout-map">
+        <div class="lm top">툴바 · 트랜스포트 · 타임 디스플레이</div>
+        <div class="lm left">INSPECTOR<small>F5 · 트랙/음표 설정</small></div>
+        <div class="lm center">TRACK EDITOR<small>트랙과 파트 배치</small></div>
+        <div class="lm right">BROWSER<small>보이스뱅크 · 웹</small></div>
+        <div class="lm bottom">LOWER ZONE — MUSICAL EDITOR (F2) / WAVE EDITOR / MIXER (F3)</div>
+      </div>
+      <div class="cards c3">
+        <article class="card"><h3>파트 종류</h3><p><b>VOCALOID:AI 파트</b> — V6 이후 보이스뱅크. 피치·비브라토·표현·타이밍 툴 사용 가능.<br/><b>VOCALOID 파트</b> — V3~V5 보이스뱅크. 이모션 툴·어택/릴리즈 이펙트 사용.<br/><b>오디오 파트</b> — WAV/MP3 반주.</p></article>
+        <article class="card"><h3>트랙 헤더</h3><p>색상(우클릭, 16색) · 이름 · 보이스뱅크 · <kbd>E</kbd> 이펙트 · <kbd>M</kbd> 뮤트 · <kbd>S</kbd> 솔로(길게 누르면 Solo Defeat) · <kbd>R</kbd> 녹음 · 볼륨 · 팬.</p></article>
+        <article class="card"><h3>특수 트랙</h3><p><b>TIMESIG</b> 박자, <b>TEMPO</b> 템포(연필/라인 툴로 입력), <b>MAIN</b> 마스터 볼륨과 마스터 이펙트. 상단 버튼으로 표시/숨김.</p></article>
+      </div>
+    </section>
+
+    <!-- 03 TRACK EDITOR -->
+    <section id="track-editor" class="sec">
+      <header class="sec-head"><span class="num">03</span><h2>트랙 에디터</h2><p>곡 전체 구조를 짜는 곳. 파트를 만들고, 옮기고, 자릅니다.</p></header>
+      <div class="tools">
+        <div class="tool"><span class="key">1</span><h4>화살표</h4><p>선택·이동. <kbd>Ctrl/⌘</kbd>+클릭 다중 선택, 드래그로 범위 선택.</p></div>
+        <div class="tool"><span class="key">2</span><h4>연필 / 라인</h4><p>새 파트, 볼륨·팬 오토메이션, 템포·박자 입력. 다시 클릭하면 라인 툴로 전환. <kbd>Alt/⌥</kbd> 누르는 동안 임시 연필.</p></div>
+        <div class="tool"><span class="key">3</span><h4>가위</h4><p>파트를 둘로 나눕니다.</p></div>
+        <div class="tool"><span class="key">×</span><h4>뮤트</h4><p>선택한 파트를 뮤트/해제. 뮤트된 파트는 재생되지 않음.</p></div>
+        <div class="tool"><span class="key">⊞</span><h4>그리드</h4><p>입력 위치를 1/4 등 단위로 스냅. "T"는 셋잇단. <kbd>Ctrl/⌘</kbd> 누르는 동안 임시 해제.</p></div>
+      </div>
+      <h3 class="sub">반복 재생 구간 만들기</h3>
+      <ul class="list">
+        <li>룰러의 시작/끝 마커를 드래그 → 리피트 자동 ON.</li>
+        <li>파트 선택 후 <kbd>P</kbd> — 그 파트 범위를 반복 구간으로.</li>
+        <li>Mac: <kbd>⌥</kbd>+클릭 = 시작 마커, <kbd>⌘</kbd>+클릭 = 끝 마커 · Windows: <kbd>Ctrl</kbd>+클릭 = 시작, <kbd>Alt</kbd>+클릭 = 끝.</li>
+        <li><kbd>C</kbd>로 리피트 켜기/끄기.</li>
+      </ul>
+      <h3 class="sub">파트 우클릭 메뉴</h3>
+      <div class="cards c3">
+        <article class="card"><h3>Create Part on Song Position</h3><p>현재 재생 위치에 새 파트 생성.</p></article>
+        <article class="card"><h3>Double Tempo</h3><p>파트 길이를 절반으로 → 템포가 두 배처럼 들림.</p></article>
+        <article class="card"><h3>Half Tempo</h3><p>파트 길이를 두 배로 → 템포가 절반처럼 들림.</p></article>
+      </div>
+      <div class="tip"><b>오토메이션</b> 볼륨/팬 슬라이더 왼쪽의 <kbd>&gt;</kbd>를 누르면 오토메이션 레인이 열립니다. 연필로 포인트를 찍어 곡선을 그리세요.</div>
+    </section>
+
+    <!-- 04 MUSICAL EDITOR -->
+    <section id="musical-editor" class="sec">
+      <header class="sec-head"><span class="num">04</span><h2>뮤지컬 에디터</h2><p>피아노롤에서 음표와 노래 표현을 다듬는 핵심 공간.</p></header>
+      <div class="tools">
+        <div class="tool"><span class="key">1</span><h4>화살표</h4><p>음표·파라미터 포인트 선택 및 이동.</p></div>
+        <div class="tool"><span class="key">2</span><h4>연필 / 라인</h4><p>음표·파라미터 입력. <kbd>Shift</kbd> 누르는 동안 임시 연필.</p></div>
+        <div class="tool"><span class="key">3</span><h4>가위</h4><p>음표 분할. 발음기호 잠금은 풀림. 그리드에 맞춰 분할.</p></div>
+        <div class="tool"><span class="key">×</span><h4>뮤트</h4><p>음표 단위 뮤트.</p></div>
+      </div>
+      <h3 class="sub">표현 툴 <span class="badge ai">AI 파트</span></h3>
+      <div class="tools">
+        <div class="tool accent"><span class="key">4</span><h4>피치</h4><p>앞/뒤 트랜지션, 미세조정, 드리프트를 핸들로 조절. 피치 펜슬로 직접 그리고 지우개로 삭제(펜슬/지우개는 VOCALOID 파트도 가능).</p></div>
+        <div class="tool accent"><span class="key">5</span><h4>비브라토</h4><p>깊이·속도·시작 위치를 음표 위에서 바로 조절.</p></div>
+        <div class="tool accent"><span class="key">6</span><h4>익스프레션</h4><p>음표 앞·중간·뒤 강약(Leading/Middle/Following).</p></div>
+        <div class="tool accent"><span class="key">7</span><h4>타이밍</h4><p>음소(phoneme) 단위로 발음 시점을 앞뒤로 이동.</p></div>
+        <div class="tool"><span class="key">E</span><h4>이모션 <span class="badge">VOCALOID 파트</span></h4><p>주황 띠를 클릭해 Accent 조절. 자음 시작이면 왼쪽 끝을 끌어 자음 길이(Velocity) 조절. 비브라토 이펙트가 있으면 패드로 주기·진폭 조절.</p></div>
+      </div>
+      <h3 class="sub">편집 꿀기능</h3>
+      <div class="cards c3">
+        <article class="card"><h3>Action 메뉴</h3><p><b>Convert to Breath</b> — 음표를 숨소리로.<br/><b>Convert to Silence</b> — 음표를 무음으로.</p></article>
+        <article class="card"><h3>Job 서브메뉴</h3><p>스타카토 · 균등 분할 · 지정 위치 분할 · 합치기 · 겹침 해결 · 쉼표 삽입 · 조옮김(반음 단위). 선택이 없으면 파트 전체에 적용.</p></article>
+        <article class="card"><h3>Quantize</h3><p><kbd>Q</kbd> 그리드에 정렬, <kbd>Shift</kbd>+<kbd>Q</kbd> 50%만 가까이.</p></article>
+        <article class="card"><h3>Paste Special</h3><p>가사/피치/비브라토/익스프레션 등 원하는 항목만 골라 붙여넣기.</p></article>
+        <article class="card"><h3>Fix / Unfix Pitch</h3><p>음표별 피치를 고정하거나, 해제해 시스템이 다시 계산하게 함.</p></article>
+        <article class="card"><h3>Auto Vibrato</h3><p>AI 트랙은 음표 입력·길이 변경·복제·불러오기 시 자동 비브라토. 인스펙터에서 Vibrato &gt; Manual을 켜면 자동 적용 제외.</p></article>
+      </div>
+      <div class="tip"><b>보기 옵션</b> 툴바에서 피치 곡선(주황선), 파형, 보이스뱅크 이미지 표시를 켜고 끌 수 있습니다. 보이스뱅크 이미지는 PNG(최대 1024×1024)를 끌어다 넣어 직접 바꿀 수 있어요.</div>
+    </section>
+
+    <!-- 05 LYRICS -->
+    <section id="lyrics" class="sec">
+      <header class="sec-head"><span class="num">05</span><h2>가사 입력</h2><p>키보드만으로 빠르게 가사를 붙이는 법.</p></header>
+      <div class="two">
+        <div>
+          <h3 class="sub">두 가지 입력 모드 <kbd>Ctrl/⌘</kbd>+<kbd>R</kbd></h3>
+          <ul class="list">
+            <li><b>Letter Mode</b> — 일반 글자로 가사 입력 (예: 사랑, love, あい).</li>
+            <li><b>Phonetic Symbols Mode</b> — 발음기호를 직접 편집 (예: <code>s a</code>).</li>
+          </ul>
+          <h3 class="sub">알아두면 좋은 것</h3>
+          <ul class="list">
+            <li>후보가 여러 개면 입력창 아래 드롭다운으로 발음/언어 선택.</li>
+            <li><b>하이픈 <code>-</code></b> = 멜리스마. 앞 음표의 모음을 이어 부릅니다.</li>
+            <li>다국어 보이스는 한 곡에 언어를 섞어 쓸 수 있음.</li>
+            <li>음표 우클릭 → <b>Phoneme Lock</b>으로 발음기호 보호(자동 변환 제외).</li>
+            <li>보이스 언어를 바꿨다면 Job → <b>Convert Phonemes to Match Language</b>.</li>
+            <li>파트 밖에 음표를 찍으면 가장 가까운 파트가 자동으로 늘어납니다.</li>
+          </ul>
+        </div>
+        <div class="keypanel">
+          <p class="kp-title">LYRIC KEYS</p>
+          <div class="kp-row"><kbd>Enter</kbd><span>가사 편집 시작</span></div>
+          <div class="kp-row"><kbd>Tab</kbd><span>다음 음표 가사</span></div>
+          <div class="kp-row"><kbd>Shift</kbd>+<kbd>Tab</kbd><span>이전 음표 가사</span></div>
+          <div class="kp-row"><kbd>← →</kbd><span>이전/다음 음표 선택</span></div>
+          <div class="kp-row"><kbd>Shift</kbd>+<kbd>← →</kbd><span>선택 범위 확장</span></div>
+          <div class="kp-row"><kbd>↑ ↓</kbd><span>반음 올림/내림</span></div>
+          <div class="kp-row"><kbd>Shift</kbd>+<kbd>↑ ↓</kbd><span>옥타브 올림/내림</span></div>
+          <div class="kp-row"><kbd>Shift</kbd>+<kbd>A</kbd> / <kbd>Z</kbd><span>가사 왼쪽/오른쪽 밀기</span></div>
+          <div class="kp-row"><kbd>Ctrl/⌘</kbd>+<kbd>I</kbd><span>가사 일괄 삽입</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 PARAMS -->
+    <section id="params" class="sec">
+      <header class="sec-head"><span class="num">06</span><h2>컨트롤 파라미터</h2><p>음표 아래 레인에 곡선을 그려 소리를 시간에 따라 바꿉니다. <kbd>Ctrl/⌘</kbd>+<kbd>P</kbd>로 표시/숨김.</p></header>
+      <div class="filter" role="tablist">
+        <button class="chip active" data-pf="all">전체</button>
+        <button class="chip" data-pf="ai">AI 파트 전용/가능</button>
+        <button class="chip" data-pf="v">VOCALOID 파트</button>
+      </div>
+      <div class="ptable" id="ptable"></div>
+      <div class="tip"><b>값 직접 입력</b> 포인트를 선택하면 왼쪽 텍스트박스에 값이 표시됩니다. 여러 개를 선택하고 값을 입력하면 한꺼번에 적용. 화살표 툴로 점을 더블클릭해도 입력창이 뜹니다.</div>
+    </section>
+
+    <!-- 07 INSPECTOR -->
+    <section id="inspector" class="sec">
+      <header class="sec-head"><span class="num">07</span><h2>인스펙터</h2><p><kbd>F5</kbd>. 트랙을 고르면 트랙 인스펙터, 음표를 고르면 노트 인스펙터.</p></header>
+      <div class="two">
+        <div class="card big">
+          <h3>TRACK 인스펙터</h3>
+          <ul class="list">
+            <li><b>VOICE / TYPE</b> — 보이스와 보이스 타입 선택.</li>
+            <li><b>STYLE</b> — 트랙 전체 노래 스타일 프리셋. 바꿔도 직접 그린 파라미터는 유지. 💾 버튼으로 내 프리셋 저장.</li>
+            <li><b>BREATH</b> — 숨소리 자동 삽입. 빈도 + EXHALATION(볼륨).</li>
+            <li><b>ROBOT VOICE</b> — HARD / NORMAL / SOFT.</li>
+            <li><b>SINGING SKILL</b> <span class="badge">V 파트</span> — 피치벤드·다이내믹스 자동 적용 (SKILL, AMOUNT).</li>
+            <li><b>VOICE COLOR</b> — 파라미터 전체에 오프셋.
+              <span class="mini">EXPRESSION 0~100 (AI) · AIR −100~+100 (AI) · CHARACTER −64~+63 · ATTACK −100~+100 (V7 보이스) · EXCITER/GROWL/BREATHINESS/MOUTH (V 파트)</span></li>
+            <li><b>TAKE</b> <span class="badge">V 파트</span> — 발음 타이밍 변형.</li>
+          </ul>
+        </div>
+        <div class="card big">
+          <h3>NOTE 인스펙터</h3>
+          <ul class="list">
+            <li><b>LYRIC / PHONETIC SYMBOL</b> — 가사와 발음기호 편집, 🔒 버튼으로 보호.</li>
+            <li><b>ATTACK / RELEASE EFFECT</b> <span class="badge">V 파트</span> — 음표 앞/끝에 효과. 아이콘 클릭으로 적용, 다시 클릭 해제. 강도 SOFT 0.0 ~ HARD 1.0. 분류: Pitch · Dynamics · Tone · Ornamentation. 보이스 전용 효과는 탭 상단에.</li>
+            <li><b>PARAMETER</b> <span class="badge ai">AI 파트</span> — 숫자로 정밀 조절:
+              <span class="mini">Pitch: Leading/Following Transition, Fine Tune, Leading/Overall/Following Drift<br/>Vibrato: Manual, Rate, Depth, Vibrato Start, Leading/Following Depth<br/>Expression: Leading/Middle/Following</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 EFFECTS -->
+    <section id="effects" class="sec">
+      <header class="sec-head"><span class="num">08</span><h2>오디오 이펙트</h2><p>트랙의 <kbd>E</kbd> 버튼 또는 믹서의 EFFECT 버튼으로 엽니다.</p></header>
+      <ul class="list inline">
+        <li><b>추가</b> 오른쪽 Effect List에서 클릭</li>
+        <li><b>삭제</b> 다시 클릭 또는 우클릭 → Delete Audio Effect</li>
+        <li><b>바이패스</b> 각 이펙트 좌상단 스위치 / 리스트 우측 스위치로 전체</li>
+        <li><b>순서</b> 드래그 앤 드롭</li>
+        <li><b>프리셋</b> 각 이펙트 우상단 목록</li>
+      </ul>
+      <div class="fx-grid" id="fx-grid"></div>
+    </section>
+
+    <!-- 09 WAVE / MIXER -->
+    <section id="wave-mixer" class="sec">
+      <header class="sec-head"><span class="num">09</span><h2>웨이브 에디터 · 믹서</h2><p>반주 오디오 다루기와 최종 밸런스.</p></header>
+      <div class="cards c3">
+        <article class="card"><h3>오디오 넣기</h3><p>Finder/탐색기에서 WAV·MP3를 끌어다 놓기. 내부적으로 44.1kHz/16bit로 변환됩니다. 지원: WAV 8/16/24bit·32bit float, 44.1~192kHz / MP3 128~320kbps.</p></article>
+        <article class="card"><h3>Change Pitch</h3><p>오디오 음정을 −12 ~ +12 반음(±1200 cent) 변경.</p></article>
+        <article class="card"><h3>Time Stretch</h3><p>파트 오른쪽 끝을 <kbd>Alt/⌥</kbd>+드래그. 0.5배 ~ 4배.</p></article>
+        <article class="card"><h3>Normalize</h3><p><kbd>Alt/⌥</kbd>+<kbd>N</kbd>. 오디오 파트 최대 레벨을 0dBFS로.</p></article>
+        <article class="card"><h3>믹서 (F3)</h3><p>트랙별 EFFECT · OUTPUT 라우팅 · 팬 · 볼륨 페이더 · M/S/R. 오른쪽 끝이 MAIN.</p></article>
+        <article class="card"><h3>기본값 복귀</h3><p>페이더·노브를 <kbd>Ctrl/⌘</kbd>+클릭하면 기본값으로 리셋.</p></article>
+      </div>
+    </section>
+
+    <!-- 10 EXPORT -->
+    <section id="export" class="sec">
+      <header class="sec-head"><span class="num">10</span><h2>저장 · 내보내기</h2><p>프로젝트 파일, 오디오, MIDI.</p></header>
+      <div class="two">
+        <div>
+          <h3 class="sub">열 수 있는 파일</h3>
+          <table class="tbl">
+            <tr><th>형식</th><th>비고</th></tr>
+            <tr><td><code>.vprx</code></td><td>VOCALOID7 프로젝트</td></tr>
+            <tr><td><code>.vpr</code></td><td>VOCALOID5/6 — 보이스는 트랙 단위로 적용</td></tr>
+            <tr><td><code>.vsqx</code></td><td>VOCALOID3/4 — 오디오 트랙은 읽지 않음</td></tr>
+            <tr><td><code>.ppsf</code></td><td>Piapro Studio — 박자·템포·음표·가사·발음기호</td></tr>
+            <tr><td><code>.svp .ust .ccs .tssln .musicxml .mxl</code></td><td>타 소프트웨어 — 박자·템포·음표·가사만</td></tr>
+            <tr><td><code>.mid .wav .mp3</code></td><td>File → Import File로 가져오기</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3 class="sub">Audio Mixdown <kbd>Ctrl/⌘</kbd>+<kbd>E</kbd></h3>
+          <ul class="list">
+            <li><b>Main Track</b> — 모든 오토메이션·트랙/메인 이펙트 적용한 완성본 1개.</li>
+            <li><b>Multi Track</b> — 트랙별 파일 <code>[제목]_[번호]_[트랙명]</code>. 메인 이펙트·메인 볼륨 오토메이션은 제외. 스테레오/모노 선택.</li>
+            <li><b>WAVE</b> 44.1 / 48 / 96 / 192kHz, 16 / 24bit</li>
+            <li><b>MP3</b> 128 / 256 / 320kbps</li>
+            <li>Bypass Effect Plug-ins · Open folder after mixdown 옵션</li>
+          </ul>
+          <h3 class="sub">그 외</h3>
+          <ul class="list">
+            <li><b>Export to Audio File</b> — 파트 하나만 오디오로.</li>
+            <li><b>Export MIDI</b> — SMF로 저장(가사 인코딩 선택).</li>
+            <li><b>Project Settings</b> — Tuning(Hz), Measure Offset(시작 마디 번호).</li>
+            <li><b>Revert</b> — 마지막 저장 상태로 되돌리기.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11 DAW -->
+    <section id="daw" class="sec">
+      <header class="sec-head"><span class="num">11</span><h2>VST/AU · ARA · Cubase</h2><p>DAW 안에서 플러그인으로 쓰기.</p></header>
+      <div class="cards c3">
+        <article class="card"><h3>VST/AU 에디션</h3><p>DAW 프로젝트를 저장하면 VOCALOID 시퀀스도 함께 저장. <code>.vprx</code> 가져오기 가능. 재생/정지 조작 가능.</p></article>
+        <article class="card"><h3>ARA</h3><p>호스트에서 ARA 플러그인 <b>"VOCALOID7 Bridge"</b>를 활성화하면 송 포지션 변경, 반복 구간 설정을 플러그인에서 제어.</p></article>
+        <article class="card"><h3>템포 동기화</h3><p>템포 트랙 헤더 버튼으로 전환. 켜짐 = Local(VOCALOID 템포 사용, 편집 가능). 꺼짐 = 아래 표.</p></article>
+      </div>
+      <table class="tbl">
+        <tr><th>모드</th><th>Allow Connection</th><th>Bridge</th><th>동작</th></tr>
+        <tr><td>Global</td><td>No</td><td>미연결</td><td>DAW 템포 사용. 재생 중 템포 변경 시 위치 어긋남</td></tr>
+        <tr><td>Locked</td><td>Yes</td><td>미연결</td><td>VOCALOID 템포 사용</td></tr>
+        <tr><td>Synchronized</td><td>Yes</td><td>연결</td><td>DAW 템포와 완전 동기화</td></tr>
+      </table>
+      <h3 class="sub">Cubase Integration</h3>
+      <ul class="list">
+        <li>환경설정에서 <b>ARA를 끈 상태</b>로 Cubase에 VOCALOID7 VSTi를 넣으면 활성화.</li>
+        <li><code>VOCALOID7Extension</code> 폴더 트랙이 자동 생성되고, 그 안의 MIDI 트랙만 동기화. 폴더 이름은 바꾸지 마세요.</li>
+        <li>동기화: 트랙(이름·뮤트·솔로·순서), 파트, 템포·박자, 재생/루프, 음표, 가사(노트 텍스트), 파라미터, 피치벤드.</li>
+      </ul>
+      <details class="acc"><summary>MIDI CC ↔ 파라미터 대응표 보기</summary>
+        <table class="tbl">
+          <tr><th>파라미터</th><th>VOCALOID 파트</th><th>AI 파트</th></tr>
+          <tr><td>VEL Velocity</td><td>Velocity</td><td>—</td></tr>
+          <tr><td>DYN Dynamics</td><td>CC11</td><td>CC11</td></tr>
+          <tr><td>PB PitchBend</td><td>Pitch Bend</td><td>Pitch Bend</td></tr>
+          <tr><td>PBS Sensitivity</td><td>CC6 (+RPN CC101/100 = 0)</td><td>CC6 (+RPN CC101/100 = 0)</td></tr>
+          <tr><td>EXT Exciter</td><td>CC20</td><td>—</td></tr>
+          <tr><td>GRW Growl</td><td>CC82</td><td>—</td></tr>
+          <tr><td>XSY Cross Synthesis</td><td>CC81</td><td>—</td></tr>
+          <tr><td>BRE Breathiness</td><td>CC17</td><td>—</td></tr>
+          <tr><td>AIR Air</td><td>CC21</td><td>CC85</td></tr>
+          <tr><td>CHA Character</td><td>CC22</td><td>CC86</td></tr>
+          <tr><td>BRI Brightness</td><td>CC74</td><td>—</td></tr>
+          <tr><td>CLR Clearness</td><td>CC18</td><td>—</td></tr>
+          <tr><td>POR Portamento Timing</td><td>CC5</td><td>—</td></tr>
+          <tr><td>EXP Expression</td><td>—</td><td>CC83</td></tr>
+          <tr><td>ATK Attack (V7 보이스)</td><td>—</td><td>CC87</td></tr>
+        </table>
+      </details>
+    </section>
+
+    <!-- 12 LITE -->
+    <section id="lite" class="sec">
+      <header class="sec-head"><span class="num">12</span><h2>VOCALOID7 Editor Lite</h2><p>보이스뱅크에 포함된 무료 에디터.</p></header>
+      <div class="compare">
+        <div class="col"><p class="col-h">EDITOR (유료)</p><ul><li>트랙 수 제한 없음</li><li>VST / AU / ARA / Cubase 연동</li><li>모든 기능</li></ul></div>
+        <div class="col dim"><p class="col-h">LITE (무료)</p><ul><li>VOCALOID 트랙 1개 + 오디오 트랙 1개</li><li>DAW 플러그인으로 에디터 화면 열리지 않음</li><li>기간 제한 없음 (보이스뱅크 1개 이상 인증 필요)</li></ul></div>
+      </div>
+      <div class="tip warn"><b>주의</b> 유료판 프로젝트를 Lite로 열면 번호가 가장 낮은 트랙만 불러오고, 그 상태로 저장하면 나머지 트랙은 <u>삭제</u>됩니다. 유료판 시리얼로 재인증하면 재설치 없이 업그레이드됩니다.</div>
+    </section>
+
+    <!-- 13 PREFS -->
+    <section id="prefs" class="sec">
+      <header class="sec-head"><span class="num">13</span><h2>환경설정</h2><p>Mac: VOCALOID7 Editor 메뉴 · Windows: Setting 메뉴 · <kbd>Ctrl/⌘</kbd>+<kbd>,</kbd></p></header>
+      <div class="cards c3">
+        <article class="card"><h3>General</h3><p>기본 보이스 · 보이스 변경 시 스타일 교체 방식 · 정지 시 시작 위치로 · 0.5초 프리롤 · 편집 구간 뒤 파라미터 값 처리 · 업데이트 확인 · 마우스 휠 반전 · <b>15분 자동 백업</b>.</p></article>
+        <article class="card"><h3>Audio</h3><p>오디오 장치 · 좌/우 출력 · 버퍼 크기 · 샘플레이트 · MIDI 장치. (VST/AU판에는 없음)</p></article>
+        <article class="card"><h3>Details</h3><p>트랙 색 · 언어별 기본 가사 · 선호 언어 순서 · 캐시 용량/비우기 · 사용 정보 전송 · VOCALOID Bridge 연결 허용.</p></article>
+      </div>
+      <div class="tip"><b>단축키 커스텀</b> Keyboard Shortcuts 창에서 추가·변경·삭제하고 프리셋으로 저장해 바꿔 쓸 수 있습니다.</div>
+    </section>
+
+    <!-- 14 SHORTCUTS -->
+    <section id="shortcuts" class="sec">
+      <header class="sec-head"><span class="num">14</span><h2>단축키</h2><p>기본 프리셋(VOCALOID7) 기준.</p></header>
+      <div class="sc-bar">
+        <input id="sc-filter" type="search" placeholder="단축키 필터… (예: zoom, 가사, mixer)" />
+        <div class="os-toggle" role="group" aria-label="운영체제">
+          <button class="chip active" data-os="mac">macOS</button>
+          <button class="chip" data-os="win">Windows</button>
+        </div>
+      </div>
+      <div id="sc-list" class="sc-list"></div>
+    </section>
+
+    <!-- 15 PHONEMES -->
+    <section id="phonemes" class="sec">
+      <header class="sec-head"><span class="num">15</span><h2>발음기호표</h2><p>Phonetic Symbols Mode에서 직접 입력할 때 참고하세요.</p></header>
+      <div class="filter" id="ph-tabs"></div>
+      <div id="ph-grid" class="ph-grid"></div>
+      <p class="note" id="ph-note"></p>
+    </section>
+
+    <!-- 16 FAQ -->
+    <section id="faq" class="sec">
+      <header class="sec-head"><span class="num">16</span><h2>자주 묻는 질문</h2><p>매뉴얼에서 자주 헷갈리는 포인트.</p></header>
+      <details class="acc"><summary>재생해도 소리가 안 나요 / 늦게 나와요</summary><p>파트는 왼쪽부터 칠해지며 합성됩니다. 칠해진 구간만 들립니다. 긴 파트는 가위 툴로 나누세요. 트랙의 M(뮤트)·S(솔로) 상태, 상단 전역 M/S 버튼도 확인하세요.</p></details>
+      <details class="acc"><summary>피치·비브라토 툴이 회색이에요</summary><p>피치/비브라토/익스프레션/타이밍 툴은 VOCALOID:AI 파트(V6 이후 보이스) 전용입니다. V3~V5 보이스는 이모션 툴과 어택/릴리즈 이펙트를 쓰세요.</p></details>
+      <details class="acc"><summary>보이스 언어를 바꿨더니 발음이 이상해요</summary><p>발음기호는 자동 변환되지 않습니다. Job → Convert Phonemes to Match Language를 실행하세요. 잠금된(Phoneme Lock) 음표는 변환에서 제외됩니다.</p></details>
+      <details class="acc"><summary>녹음 버튼을 눌렀는데 피아노 소리가 나요</summary><p>정상입니다. MIDI 녹음 중에는 VOCALOID 대신 피아노 소리로 모니터링하며, 녹음할 때마다 새 파트가 생깁니다. 트랙의 R 버튼이 켜져 있어야 합니다.</p></details>
+      <details class="acc"><summary>프로그램이 갑자기 꺼졌어요</summary><p>환경설정 General의 Auto Backup을 켜 두면 15분마다 백업됩니다(한 번 이상 저장한 프로젝트만). 다시 열 때 복구 여부를 묻습니다.</p></details>
+      <details class="acc"><summary>더 많은 도움이 필요해요</summary><p>공식 FAQ: <a href="https://www.vocaloid.com/en/support/faq" target="_blank" rel="noopener">vocaloid.com/en/support/faq</a> · 고객센터: <a href="https://www.vocaloid.com/en/support/" target="_blank" rel="noopener">vocaloid.com/en/support</a></p></details>
+    </section>
+
+    <footer class="foot">
+      <svg viewBox="0 0 100 100" class="brand-v big" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <p>VOCALOID7 Editor Reference Manual V7.0.0 기반 비공식 한국어 요약 가이드입니다.<br/>VOCALOID는 Yamaha Corporation의 상표입니다. 정확한 정보는 공식 매뉴얼을 확인하세요.</p>
+    </footer>
+  </main>
+
+  <button id="to-top" class="to-top" aria-label="맨 위로">↑</button>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

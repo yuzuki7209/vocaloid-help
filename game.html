@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>단축키 게임 — V7 GUIDE</title>
+  <meta name="description" content="VOCALOID7 Editor 단축키를 4지선다 타임어택으로 외우는 미니게임." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="pages.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2302050b'/><path d='M22 18h14l14 46 14-46h14L56 86H44z' fill='%232f7dff'/></svg>" />
+</head>
+<body class="nosidebar">
+  <header class="topbar">
+    <a href="/" class="brand" aria-label="홈으로">
+      <svg viewBox="0 0 100 100" class="brand-v" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <span>V7&nbsp;GUIDE</span>
+    </a>
+    <nav class="topnav" aria-label="페이지">
+      <a href="/guide">가이드</a><a href="/converter">발음 변환기</a><a href="/game" class="on">단축키 게임</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="pagehead">
+      <p class="eyebrow">SHORTCUT DRILL</p>
+      <h1 class="ph-title">단축키 게임</h1>
+      <p class="lead">10문제, 문제당 10초. 빨리 맞힐수록, 연속으로 맞힐수록 점수가 올라갑니다. 숫자키 <kbd>1</kbd>–<kbd>4</kbd>로도 답할 수 있어요.</p>
+    </section>
+
+    <section class="sec" style="padding-top:40px">
+      <div class="game" id="game">
+        <div class="g-hud">
+          <div><small>SCORE</small><b id="h-score">0</b></div>
+          <div><small>QUESTION</small><b id="h-q">0/10</b></div>
+          <div><small>COMBO</small><b id="h-combo" class="combo">×0</b></div>
+          <div><small>BEST</small><b id="h-best">0</b></div>
+        </div>
+        <div class="g-timer"><i id="timer"></i></div>
+        <div class="g-body" id="g-body"></div>
+      </div>
+      <div class="tip"><b>점수</b> 정답 100점 + 남은 시간 1초당 10점 + 콤보 보너스(연속 정답 × 20점). 끝나면 틀린 단축키를 다시 보여줍니다.</div>
+    </section>
+
+    <footer class="foot">
+      <svg viewBox="0 0 100 100" class="brand-v big" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <p>문제는 VOCALOID7 기본 단축키 프리셋 기준입니다.</p>
+    </footer>
+  </main>
+  <script src="data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

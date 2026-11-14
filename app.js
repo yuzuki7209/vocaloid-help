@@ -9,11 +9,12 @@
   };
 
   /* Video: load the iframe only on click */
-  $("#video-poster").addEventListener("click", () => {
+  $("#video-poster")?.addEventListener("click", () => {
     $("#video-wrap").innerHTML =
       '<iframe src="https://www.youtube-nocookie.com/embed/GJ92CbivkEY?autoplay=1&rel=0" title="VOCALOID7 - Imagine the culture. Imagine the future." allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
   });
 
+  if ($("#ptable")) {
   /* Control parameters */
   const renderParams = (f) => {
     $("#ptable").innerHTML = D.params
@@ -95,7 +96,7 @@
     if (el) {
       if (el.tagName === "DETAILS") el.open = true;
       el.scrollIntoView({ behavior: "smooth", block: "start" });
-      el.animate([{ outline: "2px solid #ff2d6f" }, { outline: "2px solid transparent" }], { duration: 1600 });
+      el.animate([{ outline: "2px solid #2f7dff" }, { outline: "2px solid transparent" }], { duration: 1600 });
     }
   };
   const draw = () => {
@@ -124,8 +125,11 @@
     if (e.key === "/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); input.focus(); }
   });
 
+  }
+
   /* Sidebar: mobile toggle + scroll spy */
   const side = $("#sidebar");
+  if (side) {
   $("#menu-btn").addEventListener("click", () => side.classList.toggle("open"));
   $$("a", side).forEach((a) => a.addEventListener("click", () => side.classList.remove("open")));
   const links = new Map($$("a", side).map((a) => [a.getAttribute("href").slice(1), a]));
@@ -138,6 +142,7 @@
     });
   }, { rootMargin: "-30% 0px -65% 0px" });
   $$("main .sec").forEach((s) => spy.observe(s));
+  }
 
   /* Reveal on scroll */
   const rv = new IntersectionObserver((ents) => ents.forEach((en) => {
@@ -147,6 +152,6 @@
 
   /* Back to top */
   const tt = $("#to-top");
-  addEventListener("scroll", () => tt.classList.toggle("show", scrollY > 800), { passive: true });
-  tt.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+  if (tt) addEventListener("scroll", () => tt.classList.toggle("show", scrollY > 800), { passive: true });
+  tt?.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
 })();
