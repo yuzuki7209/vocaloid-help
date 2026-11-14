@@ -6,7 +6,7 @@
   const keys = (k) => k.split(" / ").map((part) => part.split(" ").map((x) => `<kbd>${esc(x)}</kbd>`).join("")).join(" / ");
 
   const ROUND = 10, TIME = 10;
-  const cfg = { os: store.get("v7-os") || (/Win/i.test(navigator.platform) ? "win" : "mac"), dir: "f2k" };
+  const cfg = { os: store.get("v7-os") || (/Win/i.test(navigator.platform) ? "win" : "mac"), dir: "mix" };
   let st, tick, startAt, locked;
 
   const pool = () => window.V7.shortcuts
@@ -27,7 +27,7 @@
       <h2>준비됐나요?</h2>
       <p>기능을 보고 맞는 단축키를 고르거나, 단축키를 보고 기능을 맞혀 보세요.</p>
       <div class="opt-row"><div class="seg" id="s-os"><button data-v="mac">macOS</button><button data-v="win">Windows</button></div></div>
-      <div class="opt-row"><div class="seg" id="s-dir"><button data-v="f2k">기능 → 단축키</button><button data-v="k2f">단축키 → 기능</button></div></div>
+      <div class="opt-row"><div class="seg" id="s-dir"><button data-v="f2k">기능 → 단축키</button><button data-v="k2f">단축키 → 기능</button><button data-v="mix">혼합</button></div></div>
       <button class="btn primary" id="go">시작하기 (Enter)</button></div>`;
     const sync = () => {
       document.querySelectorAll("#s-os button").forEach((b) => b.classList.toggle("on", b.dataset.v === cfg.os));
@@ -49,15 +49,17 @@
   const ask = () => {
     locked = false;
     const q = st.qs[st.i];
-    const field = cfg.dir === "f2k" ? "k" : "f";
+    st.qdir = cfg.dir === "mix" ? (Math.random() < 0.5 ? "f2k" : "k2f") : cfg.dir;
+    const dir = st.qdir;
+    const field = dir === "f2k" ? "k" : "f";
     const others = shuffle(st.all.filter((x) => x[field] !== q[field]));
     const opts = [q];
     for (const o of others) { if (opts.length === 4) break; if (!opts.some((x) => x[field] === o[field])) opts.push(o); }
     st.opts = shuffle(opts);
-    const prompt = cfg.dir === "f2k" ? esc(q.f) : keys(q.k);
-    $("#g-body").innerHTML = `<p class="g-q-group">${esc(q.g.toUpperCase())}${cfg.dir === "f2k" ? " · 단축키는?" : " · 무슨 기능?"}</p>
+    const prompt = dir === "f2k" ? esc(q.f) : keys(q.k);
+    $("#g-body").innerHTML = `<p class="g-q-group">${esc(q.g.toUpperCase())}${dir === "f2k" ? " · 단축키는?" : " · 무슨 기능?"}</p>
       <p class="g-q">${prompt}</p>
-      <div class="g-choices">${st.opts.map((o, i) => `<button class="g-choice" data-i="${i}"><span class="n">${i + 1}</span><span>${cfg.dir === "f2k" ? keys(o.k) : esc(o.f)}</span></button>`).join("")}</div>
+      <div class="g-choices">${st.opts.map((o, i) => `<button class="g-choice" data-i="${i}"><span class="n">${i + 1}</span><span>${dir === "f2k" ? keys(o.k) : esc(o.f)}</span></button>`).join("")}</div>
       <p class="g-feedback" id="fb"></p>`;
     $("#g-body .g-choices").onclick = (e) => { const b = e.target.closest(".g-choice"); if (b) answer(+b.dataset.i); };
     hud();
@@ -71,7 +73,7 @@
     const loop = (t) => {
       const left = Math.max(0, TIME - (t - startAt) / 1000);
       bar.style.transform = `scaleX(${left / TIME})`;
-      bar.style.background = left < 3 ? "#ff6b6b" : "";
+      bar.style.background = left < 3 ? "#5cd6ff" : "";
       if (left <= 0) return answer(-1);
       tick = requestAnimationFrame(loop);
     };
@@ -83,7 +85,7 @@
     if (locked || !st) return;
     locked = true; stopTimer();
     const q = st.qs[st.i];
-    const field = cfg.dir === "f2k" ? "k" : "f";
+    const field = st.qdir === "f2k" ? "k" : "f";
     const ok = i >= 0 && st.opts[i][field] === q[field];
     const left = Math.max(0, TIME - (performance.now() - startAt) / 1000);
     const btns = document.querySelectorAll(".g-choice");

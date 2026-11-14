@@ -109,6 +109,21 @@
     soft: { ㄴ: "ん", ㅇ: "ん", ㅁ: "ん", ㄹ: "る", ㄱ: "っ", ㄷ: "っ", ㅂ: "っ" },
     clear: { ㄴ: "ん", ㅇ: "ん", ㅁ: "む", ㄹ: "る", ㄱ: "く", ㄷ: "っ", ㅂ: "ぷ" }
   };
+  // VOCALOID Japanese phonemes (see manual appendix)
+  const VJ = { a: "a", i: "i", u: "M", e: "e", o: "o" };
+  const CJ = { "": "", k: "k", g: "g", s: "s", sh: "S", j: "dZ", ch: "tS", t: "t", d: "d", n: "n", h: "h", b: "b", p: "p", m: "m", r: "4" };
+  const PAL = { k: "k'", g: "g'", t: "t'", d: "d'", n: "J", h: "C", b: "b'", p: "p'", m: "m'", r: "4'" };
+  const jpPh = (c, glide, base) => {
+    const v = jpVowel(base), vv = VJ[v];
+    let head;
+    if (glide === "y") head = c === "" ? (v === "i" ? "" : "j") : ["sh", "j", "ch"].includes(c) ? CJ[c] : c === "t" ? "tS" : c === "d" ? "dZ" : PAL[c];
+    else if (glide === "w") head = ["sh", "j", "ch"].includes(c) ? CJ[c] : c === "" ? (v === "u" ? "" : "w") : `${CJ[c]} w`;
+    else if (v === "i" && PAL[c]) head = PAL[c];
+    else if (c === "h" && v === "u") head = "p\\";
+    else head = CJ[c];
+    return [head, vv].filter(Boolean).join(" ");
+  };
+  const JP_CODA_PH = { "ん": "N\\", "っ": "", "る": "4 M", "く": "k M", "む": "m M", "ぷ": "p M", "ン": "N\\", "ッ": "", "ル": "4 M", "ク": "k M", "ム": "m M", "プ": "p M" };
   const toKata = (s) => s.replace(/[ぁ-ゖ]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) + 0x60));
 
   /* ---------- 4) English ---------- */
@@ -155,7 +170,16 @@
         const parts = lang === "ja"
           ? (o.split && jCoda ? [jHead, jCoda] : [jHead + jCoda])
           : enMain ? [enMain] : (o.split && eCoda ? [eHead, eCoda] : [eHead + eCoda]);
-        return { src: s.src, lang, parts, ph };
+
+        // per-note phonemes (for VPR export)
+        const headPh = lang === "ja" ? jpPh(c.jp, glide, base) : [c.ph, glide === "y" ? "j" : glide === "w" ? "w" : "", EN_PH[base]].filter(Boolean).join(" ");
+        const codaPh = !fin ? "" : lang === "ja" ? JP_CODA_PH[JP_CODA[o.coda][fin]] : EN_CODA_PH[fin];
+        let notes;
+        if (lang === "en" && enMain) notes = [{ t: eHead + eCoda, ph: [headPh, codaPh].filter(Boolean).join(" ") }];
+        else if (parts.length === 2) notes = [{ t: parts[0], ph: headPh }, { t: parts[1], ph: codaPh || "-" }];
+        else notes = [{ t: parts[0], ph: [headPh, codaPh].filter(Boolean).join(" ") }];
+        notes.forEach((n) => (n.lang = lang));
+        return { src: s.src, lang, parts, ph, notes };
       });
     }));
   };
@@ -191,6 +215,7 @@
     $("#tokens").innerHTML = flat.map((s, i) =>
       `<button class="tok ${s.lang}" data-i="${i}"><span class="lang">${s.lang === "ja" ? "JA" : "EN"}</span><span class="k">${s.src}</span><span class="v">${esc(s.parts.join(" "))}</span>${s.lang === "en" ? `<span class="p">${esc(s.ph)}</span>` : ""}</button>`).join("");
     $("#tokens").style.display = flat.length ? "" : "none";
+    document.dispatchEvent(new CustomEvent("v7conv"));
   };
 
   const lyricText = () => result.map((line) => line.map((w) => w.map((s) => s.parts.join(" ")).join(" ")).join(" ")).join("\n").trim();
@@ -217,4 +242,5 @@
   $("#kr").value = store.get("v7-conv-text") || "사랑해 너를";
   render();
   window.__v7convert = convert; // for testing
+  window.V7Conv = { notes: () => result.flat(2).flatMap((s) => s.notes), opts };
 })();
