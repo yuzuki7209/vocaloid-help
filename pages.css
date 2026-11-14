@@ -218,3 +218,8 @@ body.nosidebar .hero-video .frame { padding: 16px; }
 @media (max-width: 600px) {
   body.nosidebar .hero-grid { padding: 48px 16px 40px; }
 }
+
+/* ===== v6: no drag / no selection (form fields stay usable) ===== */
+body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+input, textarea, select, [contenteditable], .out-big { -webkit-user-select: text; user-select: text; }
+img, a, svg { -webkit-user-drag: none; user-drag: none; }
