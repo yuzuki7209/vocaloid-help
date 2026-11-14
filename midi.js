@@ -181,10 +181,19 @@
   };
 
   /* ---------- UI ---------- */
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  const mopts = { mode: "ja", en: "spell", kana: "hira", coda: "soft", rules: true, split: false };
+  try { Object.assign(mopts, JSON.parse(store.get("v7-midi-opts") || "{}"), { en: "spell", kana: "hira" }); } catch {}
+  const lyricNotes = () => window.KConv.convert($("#kr").value, mopts).flat(2).flatMap((s) => s.notes);
+  const syncOpts = () => {
+    store.set("v7-midi-opts", JSON.stringify(mopts));
+    document.querySelectorAll(".seg").forEach((seg) => seg.querySelectorAll("button").forEach((b) => b.classList.toggle("on", mopts[seg.dataset.opt] === b.dataset.v)));
+    $("#rules").checked = mopts.rules; $("#split").checked = mopts.split;
+  };
   let song = null, fileBase = "song";
   const current = () => {
     const tr = song.tracks[+$("#mi-track").value || 0];
-    return { notes: monophonic(tr.notes), lyrics: window.V7Conv.notes() };
+    return { notes: monophonic(tr.notes), lyrics: lyricNotes() };
   };
   const refresh = () => {
     if (!song) return;
@@ -227,12 +236,20 @@
   ["dragleave", "drop"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
   drop.addEventListener("drop", (e) => load(e.dataTransfer.files[0]));
   $("#mi-track").addEventListener("change", refresh);
-  document.addEventListener("v7conv", refresh);
+  document.querySelectorAll(".seg").forEach((seg) => seg.addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    mopts[seg.dataset.opt] = b.dataset.v; syncOpts(); refresh();
+  }));
+  $("#rules").addEventListener("change", (e) => { mopts.rules = e.target.checked; syncOpts(); refresh(); });
+  $("#split").addEventListener("change", (e) => { mopts.split = e.target.checked; syncOpts(); refresh(); });
+  $("#kr").addEventListener("input", () => { store.set("v7-midi-text", $("#kr").value); refresh(); });
+  $("#kr").value = store.get("v7-midi-text") || store.get("v7-conv-text") || "";
+  syncOpts();
 
   const title = () => ($("#mi-title").value.trim() || fileBase).replace(/[\\/:*?"<>|]/g, "_");
   $("#dl-vpr").addEventListener("click", () => {
     const { notes, lyrics } = current();
-    const langID = window.V7Conv.opts.mode === "en" ? 1 : 0;
+    const langID = mopts.mode === "en" ? 1 : 0;
     download(buildVpr(song, notes, lyrics, title(), langID), `${title()}.vpr`);
   });
   $("#dl-mid").addEventListener("click", () => {

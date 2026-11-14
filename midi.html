@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MIDI 변환 — V7 GUIDE</title>
+  <meta name="description" content="멜로디 MIDI에 한국어 가사를 일본어·영어 발음으로 입혀 VOCALOID7용 .vpr / .mid로 내보내는 도구." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="pages.css?v=3" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2302050b'/><path d='M22 18h14l14 46 14-46h14L56 86H44z' fill='%232f7dff'/></svg>" />
+</head>
+<body class="nosidebar">
+  <header class="topbar">
+    <a href="/" class="brand" aria-label="홈으로">
+      <svg viewBox="0 0 100 100" class="brand-v" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <span>V7&nbsp;GUIDE</span>
+    </a>
+    <nav class="topnav" aria-label="페이지">
+      <a href="/guide">가이드</a><a href="/converter">발음 변환기</a><a href="/midi" class="on">MIDI 변환</a><a href="/game">단축키 게임</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="pagehead">
+      <p class="eyebrow">MIDI → VOCALOID7 · BETA</p>
+      <h1 class="ph-title">MIDI에 가사 입히기</h1>
+      <p class="lead">한국어 가사와 멜로디 MIDI를 넣으면, 일본어·영어 발음으로 바꾼 가사를 음표에 순서대로 붙여 VOCALOID7에서 열 수 있는 파일로 만들어 줍니다. 파일은 서버로 전송되지 않고 브라우저 안에서만 처리됩니다.</p>
+    </section>
+
+    <section class="sec" id="midi" style="padding-top:40px">
+      <div class="conv" style="margin-bottom:20px">
+        <div>
+          <label class="lbl" for="kr">STEP 1 · 한국어 가사</label>
+          <textarea id="kr" placeholder="예) 사랑해 너를&#10;오늘 밤 별이 빛나" style="min-height:160px"></textarea>
+        </div>
+        <div>
+          <label class="lbl">STEP 2 · 발음 옵션</label>
+          <div class="opts" style="margin-top:0">
+            <div class="opt-row"><span>보이스 언어</span>
+              <div class="seg" data-opt="mode"><button data-v="ja" class="on">日本語</button><button data-v="en">English</button><button data-v="mix">혼합</button></div>
+            </div>
+            <div class="opt-row"><span>받침 처리</span>
+              <div class="seg" data-opt="coda"><button data-v="soft" class="on">부드럽게</button><button data-v="clear">또렷하게</button></div>
+            </div>
+            <div class="opt-row"><span>옵션</span>
+              <label class="chk"><input type="checkbox" id="rules" checked /> 발음 규칙(연음·비음화)</label>
+              <label class="chk"><input type="checkbox" id="split" /> 받침을 별도 음표로</label>
+            </div>
+          </div>
+          <p class="note">가사 1글자(음절) = 음표 1개. 발음을 자세히 확인하려면 <a href="/converter">발음 변환기</a>를 쓰세요.</p>
+        </div>
+      </div>
+      <label class="lbl">STEP 3 · 멜로디 MIDI</label>
+      <label class="drop" id="drop">
+        <input type="file" id="midi-in" accept=".mid,.midi,audio/midi" />
+        <span><b>MIDI 파일을 끌어다 놓거나 클릭</b>.mid / .midi · 멜로디(보컬) 트랙이 들어 있는 파일</span>
+      </label>
+
+      <div id="midi-panel" hidden>
+        <div class="midi-panel">
+          <div>
+            <p class="kp-title">FILE · <span id="mi-file"></span></p>
+            <div class="midi-info">
+              <div><small>NOTES</small><b id="mi-notes">0</b></div>
+              <div><small>LYRICS</small><b id="mi-lyrics">0</b></div>
+              <div><small>BPM</small><b id="mi-bpm">120</b></div>
+              <div><small>TIME</small><b id="mi-ts">4/4</b></div>
+            </div>
+            <label class="lbl" for="mi-track">보컬 트랙</label>
+            <select id="mi-track" class="midi-sel"></select>
+            <label class="lbl" for="mi-title" style="margin-top:14px">곡 제목 · 파일 이름</label>
+            <input id="mi-title" class="text-in" />
+            <p class="warn-line" id="mi-warn"></p>
+            <div class="copy-row">
+              <button class="btn primary" id="dl-vpr">.vpr 다운로드</button>
+              <button class="btn" id="dl-mid">가사 넣은 .mid 다운로드</button>
+            </div>
+          </div>
+          <div>
+            <p class="kp-title">NOTE ↔ LYRIC</p>
+            <div class="note-list" id="mi-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards c3" style="margin-top:20px">
+        <article class="card"><h3>.vpr (VOCALOID5/6 프로젝트)</h3><p>VOCALOID7에서 <b>File → Open</b>으로 바로 엽니다. 음표마다 발음기호가 보호(Phoneme Lock)된 상태로 들어가므로 변환기에서 본 발음 그대로 부릅니다. 연 다음 트랙의 <b>보이스뱅크를 선택</b>하세요.</p></article>
+        <article class="card"><h3>가사 넣은 .mid</h3><p>.vpr이 열리지 않을 때 쓰는 안전한 방법. <b>File → Import File</b>로 MIDI를 가져올 때 가사 인코딩을 <b>UTF-8</b>로 고르고, 가져온 뒤 <b>Job → Convert Phonemes to Match Language</b>를 실행하세요.</p></article>
+        <article class="card"><h3>음표 처리 규칙</h3><p>가장 음표가 많은 트랙을 자동 선택합니다. 화음은 가장 높은 음만 남기고, 겹치는 음표는 다음 음표 시작 지점에서 자릅니다. "받침을 별도 음표로"를 켜면 받침도 음표 하나를 차지합니다.</p></article>
+      </div>
+      <div class="tip"><b>BETA</b> .vpr 형식은 공개 사양이 없어 직접 맞춰 만든 것입니다. VOCALOID7에서 열리지 않거나 보이스가 비어 있으면 가사 넣은 .mid를 사용해 주세요.</div>
+    </section>
+
+    <footer class="foot">
+      <svg viewBox="0 0 100 100" class="brand-v big" aria-hidden="true"><path d="M8 6h20l22 64 22-64h20L58 94H42z"/></svg>
+      <p>비공식 도구입니다. .vpr 형식은 공개 사양이 없어 직접 맞춰 만든 베타 기능입니다.</p>
+    </footer>
+  </main>
+  <script src="kconv.js?v=4"></script>
+  <script src="midi.js?v=4"></script>
+</body>
+</html>

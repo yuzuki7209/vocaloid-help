@@ -20,7 +20,7 @@
       <span>V7&nbsp;GUIDE</span>
     </a>
     <nav class="topnav" aria-label="페이지">
-      <a href="/guide">가이드</a><a href="/converter" class="on">발음 변환기</a><a href="/game">단축키 게임</a>
+      <a href="/guide">가이드</a><a href="/converter" class="on">발음 변환기</a><a href="/midi">MIDI 변환</a><a href="/game">단축키 게임</a>
     </nav>
   </header>
 
@@ -69,8 +69,11 @@
             <button class="btn" id="copy-ph">발음기호 복사</button>
           </div>
           <div class="legend"><span><i style="background:var(--fg)"></i>일본어 표기</span><span><i style="background:var(--accent2)"></i>영어 표기</span><span>음표 하나 = 공백으로 구분된 한 덩어리</span></div>
-          <div id="tokens" class="tokens"></div>
-          <p class="note">각 칸을 누르면 그 음절만 복사됩니다. 영어 칸 아래 작은 글씨는 VOCALOID 영어 발음기호입니다.</p>
+          <details class="acc tok-acc" id="tok-acc">
+            <summary>음절별로 하나씩 복사 <span class="tok-count" id="tok-count"></span></summary>
+            <div id="tokens" class="tokens"></div>
+            <p class="note" style="padding:0 16px 12px">각 칸을 누르면 그 음절만 복사됩니다. 영어 칸 아래 작은 글씨는 VOCALOID 영어 발음기호입니다.</p>
+          </details>
         </div>
       </div>
 
@@ -80,49 +83,8 @@
         <article class="card"><h3>2 · 일괄 삽입</h3><p>첫 음표를 선택하고 <kbd>Ctrl/⌘</kbd>+<kbd>I</kbd> (Insert Lyrics) → 복사한 가사 붙여넣기. 공백 단위로 음표에 차례대로 들어갑니다.</p></article>
         <article class="card"><h3>3 · 발음기호로 다듬기</h3><p>영어 철자가 어색하게 들리면 <kbd>Ctrl/⌘</kbd>+<kbd>R</kbd>로 Phonetic Symbols Mode로 바꾸고, 칸 아래 발음기호를 해당 음표에 붙여넣으세요.</p></article>
       </div>
+      <div class="tip"><b>MIDI</b> 멜로디 MIDI에 이 가사를 자동으로 입혀 .vpr로 만들고 싶다면 <a href="/midi">MIDI 변환</a> 탭을 사용하세요.</div>
       <div class="tip"><b>알아두기</b> <u>혼합</u> 모드는 받침이 없고 일본어에 가까운 음절은 가나로, ㅓ·ㅡ나 받침(ㄱ·ㄷ·ㅂ·ㄹ·ㅁ)이 있는 음절은 영어로 표기합니다. 언어를 섞어 부를 수 있는 <b>다국어 보이스</b>에서만 동작합니다. 변환은 근사치이므로 마지막엔 귀로 확인하고 다듬어 주세요.</div>
-    </section>
-
-    <section class="sec" id="midi">
-      <header class="sec-head"><span class="num">MIDI</span><h2>MIDI에 가사 입혀서 내보내기 <span class="badge exp">BETA</span></h2><p>멜로디 MIDI를 올리면 위에서 변환한 가사를 음표에 순서대로 붙여, VOCALOID7에서 열 수 있는 파일로 만들어 줍니다. 파일은 서버로 전송되지 않고 브라우저 안에서만 처리됩니다.</p></header>
-      <label class="drop" id="drop">
-        <input type="file" id="midi-in" accept=".mid,.midi,audio/midi" />
-        <span><b>MIDI 파일을 끌어다 놓거나 클릭</b>.mid / .midi · 멜로디(보컬) 트랙이 들어 있는 파일</span>
-      </label>
-
-      <div id="midi-panel" hidden>
-        <div class="midi-panel">
-          <div>
-            <p class="kp-title">FILE · <span id="mi-file"></span></p>
-            <div class="midi-info">
-              <div><small>NOTES</small><b id="mi-notes">0</b></div>
-              <div><small>LYRICS</small><b id="mi-lyrics">0</b></div>
-              <div><small>BPM</small><b id="mi-bpm">120</b></div>
-              <div><small>TIME</small><b id="mi-ts">4/4</b></div>
-            </div>
-            <label class="lbl" for="mi-track">보컬 트랙</label>
-            <select id="mi-track" class="midi-sel"></select>
-            <label class="lbl" for="mi-title" style="margin-top:14px">곡 제목 · 파일 이름</label>
-            <input id="mi-title" class="text-in" />
-            <p class="warn-line" id="mi-warn"></p>
-            <div class="copy-row">
-              <button class="btn primary" id="dl-vpr">.vpr 다운로드</button>
-              <button class="btn" id="dl-mid">가사 넣은 .mid 다운로드</button>
-            </div>
-          </div>
-          <div>
-            <p class="kp-title">NOTE ↔ LYRIC</p>
-            <div class="note-list" id="mi-list"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cards c3" style="margin-top:20px">
-        <article class="card"><h3>.vpr (VOCALOID5/6 프로젝트)</h3><p>VOCALOID7에서 <b>File → Open</b>으로 바로 엽니다. 음표마다 발음기호가 보호(Phoneme Lock)된 상태로 들어가므로 변환기에서 본 발음 그대로 부릅니다. 연 다음 트랙의 <b>보이스뱅크를 선택</b>하세요.</p></article>
-        <article class="card"><h3>가사 넣은 .mid</h3><p>.vpr이 열리지 않을 때 쓰는 안전한 방법. <b>File → Import File</b>로 MIDI를 가져올 때 가사 인코딩을 <b>UTF-8</b>로 고르고, 가져온 뒤 <b>Job → Convert Phonemes to Match Language</b>를 실행하세요.</p></article>
-        <article class="card"><h3>음표 처리 규칙</h3><p>가장 음표가 많은 트랙을 자동 선택합니다. 화음은 가장 높은 음만 남기고, 겹치는 음표는 다음 음표 시작 지점에서 자릅니다. "받침을 별도 음표로"를 켜면 받침도 음표 하나를 차지합니다.</p></article>
-      </div>
-      <div class="tip"><b>BETA</b> .vpr 형식은 공개 사양이 없어 직접 맞춰 만든 것입니다. VOCALOID7에서 열리지 않거나 보이스가 비어 있으면 가사 넣은 .mid를 사용해 주세요.</div>
     </section>
 
     <footer class="foot">
@@ -131,7 +93,7 @@
     </footer>
   </main>
   <div id="toast" class="toast" role="status"></div>
-  <script src="converter.js?v=3"></script>
-  <script src="midi.js?v=3"></script>
+  <script src="kconv.js?v=4"></script>
+  <script src="converter.js?v=4"></script>
 </body>
 </html>

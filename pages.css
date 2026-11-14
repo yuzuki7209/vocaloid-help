@@ -188,3 +188,18 @@ body.nosidebar .foot { max-width: 1240px; margin: 0 auto; justify-content: cente
 .warn-line { margin: 10px 0 0; font-size: 13.5px; color: var(--accent3); min-height: 20px; }
 .badge.exp { border-color: var(--accent2); color: var(--accent2); }
 @media (max-width: 900px) { .midi-panel { grid-template-columns: 1fr; } .midi-info { grid-template-columns: 1fr 1fr; } }
+
+/* ===== v4: collapsible syllables, game explanations ===== */
+.out-big { max-height: 300px; overflow-y: auto; }
+.tok-acc { margin-top: 16px; }
+.tok-acc .tokens { margin: 0; border-left: 0; border-right: 0; max-height: 420px; overflow-y: auto; }
+.tok-count { font-family: var(--mono); font-size: 12px; color: var(--accent2); margin-left: 8px; font-weight: 400; }
+.tok-acc summary { gap: 8px; }
+.tok-acc summary::after { margin-left: auto; }
+.g-explain { margin-top: 16px; padding: 16px 18px; border: 1px solid var(--line2); border-left: 3px solid var(--accent); background: var(--bg2); }
+.g-explain.ok { border-left-color: var(--accent2); }
+.g-explain .ex-h { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 6px; font-weight: 600; }
+.g-explain p { margin: 0; color: var(--mute); font-size: 14.5px; }
+.g-next { margin-top: 16px; align-self: flex-end; }
+.lives { letter-spacing: 2px; color: var(--accent2); }
+.lives .off { color: var(--line2); }

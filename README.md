@@ -6,10 +6,11 @@ VOCALOID7 Editor Reference Manual (V7.0.0)을 한국어로 쉽게 정리한 비�
 |---|---|---|
 | `/` | `index.html` | 랜딩 페이지 |
 | `/guide` | `guide.html` + `app.js` | 16챕터 가이드, 검색(`/`), 단축키·발음기호표 |
-| `/converter` | `converter.html` + `converter.js` + `midi.js` | 한국어 → 일본어/영어/혼합 발음 변환기, MIDI → .vpr / 가사 .mid 변환 |
-| `/game` | `game.html` + `game.js` | 단축키 4지선다 타임어택 게임 |
+| `/converter` | `converter.html` + `converter.js` | 한국어 → 일본어/영어/혼합 발음 변환기 |
+| `/midi` | `midi.html` + `midi.js` | MIDI에 가사 입혀 .vpr / 가사 .mid로 내보내기 (베타) |
+| `/game` | `game.html` + `game.js` | 단축키 게임 (10문제 / 무한 모드, 기능 설명) |
 
-공통: `styles.css`, `pages.css`, `data.js`(단축키·파라미터·발음기호 데이터). 빌드 과정 없는 정적 사이트.
+공통: `styles.css`, `pages.css`, `kconv.js`(한국어 발음 변환 엔진), `data.js`(단축키·파라미터·발음기호 데이터). 빌드 과정 없는 정적 사이트.
 
 ## 로컬에서 보기
 `index.html`을 브라우저로 열거나 `python3 -m http.server` 실행 후 http://localhost:8000
