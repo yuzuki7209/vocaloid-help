@@ -134,8 +134,9 @@
           pos: 0, duration: end, styleName: "No Effect", voice, midiEffects: [],
           notes: notes.map((n, i) => {
             const l = lyrics[i];
-            const lyric = l ? (l.ph === "-" ? "-" : l.t) : (langID === 1 ? "Ooh" : "あ");
-            const phoneme = l ? l.ph : (langID === 1 ? "u:" : "a");
+            const def = { 0: ["あ", "a"], 1: ["Ooh", "u:"], 2: ["아", "a"] }[langID] || ["あ", "a"];
+            const lyric = l ? (l.ph === "-" ? "-" : l.t) : def[0];
+            const phoneme = l ? l.ph : def[1];
             return {
               lyric, phoneme, isProtected: !!l, pos: n.pos, duration: n.dur, number: n.key, velocity: 64,
               exp: { opening: 127 }, singingSkill: { duration: 158, weight: { pre: 64, post: 64 } }, vibrato: { type: 0, duration: 0 }
@@ -182,13 +183,14 @@
 
   /* ---------- UI ---------- */
   const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
-  const mopts = { mode: "ja", en: "spell", kana: "hira", coda: "soft", rules: true, split: false };
-  try { Object.assign(mopts, JSON.parse(store.get("v7-midi-opts") || "{}"), { en: "spell", kana: "hira" }); } catch {}
+  // only the target language is user-selectable; everything else uses fixed defaults
+  const mopts = { mode: "ko", en: "spell", kana: "hira", coda: "soft", rules: true, split: false };
+  const savedMode = store.get("v7-midi-mode");
+  if (["ko", "ja", "en", "mix"].includes(savedMode)) mopts.mode = savedMode;
   const lyricNotes = () => window.KConv.convert($("#kr").value, mopts).flat(2).flatMap((s) => s.notes);
   const syncOpts = () => {
-    store.set("v7-midi-opts", JSON.stringify(mopts));
+    store.set("v7-midi-mode", mopts.mode);
     document.querySelectorAll(".seg").forEach((seg) => seg.querySelectorAll("button").forEach((b) => b.classList.toggle("on", mopts[seg.dataset.opt] === b.dataset.v)));
-    $("#rules").checked = mopts.rules; $("#split").checked = mopts.split;
   };
   let song = null, fileBase = "song";
   const current = () => {
@@ -204,7 +206,7 @@
     $("#mi-ts").textContent = `${song.sigs[0].n}/${song.sigs[0].dd}`;
     const diff = notes.length - lyrics.length;
     $("#mi-warn").textContent = !lyrics.length ? "위에서 가사를 먼저 입력하세요."
-      : diff > 0 ? `음표가 가사보다 ${diff}개 많습니다. 남는 음표는 기본 가사(あ / Ooh)로 채워집니다.`
+      : diff > 0 ? `음표가 가사보다 ${diff}개 많습니다. 남는 음표는 기본 가사(아 / あ / Ooh)로 채워집니다.`
       : diff < 0 ? `가사가 음표보다 ${-diff}개 많습니다. 남는 가사는 버려집니다.` : "음표와 가사 개수가 딱 맞습니다 ✓";
     $("#mi-list").innerHTML = notes.map((n, i) => {
       const l = lyrics[i];
@@ -240,8 +242,6 @@
     const b = e.target.closest("button"); if (!b) return;
     mopts[seg.dataset.opt] = b.dataset.v; syncOpts(); refresh();
   }));
-  $("#rules").addEventListener("change", (e) => { mopts.rules = e.target.checked; syncOpts(); refresh(); });
-  $("#split").addEventListener("change", (e) => { mopts.split = e.target.checked; syncOpts(); refresh(); });
   $("#kr").addEventListener("input", () => { store.set("v7-midi-text", $("#kr").value); refresh(); });
   $("#kr").value = store.get("v7-midi-text") || store.get("v7-conv-text") || "";
   syncOpts();
@@ -249,7 +249,7 @@
   const title = () => ($("#mi-title").value.trim() || fileBase).replace(/[\\/:*?"<>|]/g, "_");
   $("#dl-vpr").addEventListener("click", () => {
     const { notes, lyrics } = current();
-    const langID = mopts.mode === "en" ? 1 : 0;
+    const langID = { ko: 2, en: 1 }[mopts.mode] ?? 0;
     download(buildVpr(song, notes, lyrics, title(), langID), `${title()}.vpr`);
   });
   $("#dl-mid").addEventListener("click", () => {

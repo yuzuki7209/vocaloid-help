@@ -9,10 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=6" />
-  <link rel="stylesheet" href="pages.css?v=6" />
+  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="pages.css?v=7" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2302050b'/><path d='M22 18h14l14 46 14-46h14L56 86H44z' fill='%232f7dff'/></svg>" />
-  <script src="protect.js?v=6"></script>
+  <script src="protect.js?v=7"></script>
 </head>
 <body class="nosidebar">
   <header class="topbar">
@@ -33,29 +33,15 @@
     </section>
 
     <section class="sec" id="midi" style="padding-top:40px">
-      <div class="conv" style="margin-bottom:20px">
-        <div>
-          <label class="lbl" for="kr">STEP 1 · 한국어 가사</label>
-          <textarea id="kr" placeholder="예) 사랑해 너를&#10;오늘 밤 별이 빛나" style="min-height:160px"></textarea>
+      <div style="margin-bottom:20px">
+        <label class="lbl" for="kr">STEP 1 · 한국어 가사</label>
+        <textarea id="kr" class="lyric-only" placeholder="예) 사랑해 너를&#10;오늘 밤 별이 빛나"></textarea>
+        <div class="opt-row" style="margin-top:12px"><span style="font-size:13px;color:var(--mute)">음표에 넣을 가사</span>
+          <div class="seg" data-opt="mode"><button data-v="ko" class="on">한국어 그대로</button><button data-v="ja">日本語 변환</button><button data-v="en">English 변환</button><button data-v="mix">혼합 변환</button></div>
         </div>
-        <div>
-          <label class="lbl">STEP 2 · 발음 옵션</label>
-          <div class="opts" style="margin-top:0">
-            <div class="opt-row"><span>보이스 언어</span>
-              <div class="seg" data-opt="mode"><button data-v="ja" class="on">日本語</button><button data-v="en">English</button><button data-v="mix">혼합</button></div>
-            </div>
-            <div class="opt-row"><span>받침 처리</span>
-              <div class="seg" data-opt="coda"><button data-v="soft" class="on">부드럽게</button><button data-v="clear">또렷하게</button></div>
-            </div>
-            <div class="opt-row"><span>옵션</span>
-              <label class="chk"><input type="checkbox" id="rules" checked /> 발음 규칙(연음·비음화)</label>
-              <label class="chk"><input type="checkbox" id="split" /> 받침을 별도 음표로</label>
-            </div>
-          </div>
-          <p class="note">가사 1글자(음절) = 음표 1개. 발음을 자세히 확인하려면 <a href="/converter">발음 변환기</a>를 쓰세요.</p>
-        </div>
+        <p class="note">가사 1글자(음절) = 음표 1개. <b>한국어 그대로</b>는 한국어 보이스뱅크용이고, 나머지는 일본어·영어 보이스가 한국어처럼 부르도록 바꿔 넣습니다.</p>
       </div>
-      <label class="lbl">STEP 3 · 멜로디 MIDI</label>
+      <label class="lbl">STEP 2 · 멜로디 MIDI</label>
       <label class="drop" id="drop">
         <input type="file" id="midi-in" accept=".mid,.midi,audio/midi" />
         <span><b>MIDI 파일을 끌어다 놓거나 클릭</b>.mid / .midi · 멜로디(보컬) 트랙이 들어 있는 파일</span>
@@ -91,7 +77,7 @@
       <div class="cards c3" style="margin-top:20px">
         <article class="card"><h3>.vpr (VOCALOID5/6 프로젝트)</h3><p>VOCALOID7에서 <b>File → Open</b>으로 바로 엽니다. 음표마다 발음기호가 보호(Phoneme Lock)된 상태로 들어가므로 변환기에서 본 발음 그대로 부릅니다. 연 다음 트랙의 <b>보이스뱅크를 선택</b>하세요.</p></article>
         <article class="card"><h3>가사 넣은 .mid</h3><p>.vpr이 열리지 않을 때 쓰는 안전한 방법. <b>File → Import File</b>로 MIDI를 가져올 때 가사 인코딩을 <b>UTF-8</b>로 고르고, 가져온 뒤 <b>Job → Convert Phonemes to Match Language</b>를 실행하세요.</p></article>
-        <article class="card"><h3>음표 처리 규칙</h3><p>가장 음표가 많은 트랙을 자동 선택합니다. 화음은 가장 높은 음만 남기고, 겹치는 음표는 다음 음표 시작 지점에서 자릅니다. "받침을 별도 음표로"를 켜면 받침도 음표 하나를 차지합니다.</p></article>
+        <article class="card"><h3>음표 처리 규칙</h3><p>가장 음표가 많은 트랙을 자동 선택합니다. 화음은 가장 높은 음만 남기고, 겹치는 음표는 다음 음표 시작 지점에서 자릅니다. 연음·비음화 같은 발음 규칙은 자동으로 적용됩니다.</p></article>
       </div>
       <div class="tip"><b>BETA</b> .vpr 형식은 공개 사양이 없어 직접 맞춰 만든 것입니다. VOCALOID7에서 열리지 않거나 보이스가 비어 있으면 가사 넣은 .mid를 사용해 주세요.</div>
     </section>
@@ -101,7 +87,7 @@
       <p>비공식 도구입니다. .vpr 형식은 공개 사양이 없어 직접 맞춰 만든 베타 기능입니다.</p>
     </footer>
   </main>
-  <script src="kconv.js?v=6"></script>
-  <script src="midi.js?v=6"></script>
+  <script src="kconv.js?v=7"></script>
+  <script src="midi.js?v=7"></script>
 </body>
 </html>

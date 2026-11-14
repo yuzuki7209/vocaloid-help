@@ -158,6 +158,19 @@
   const EN_CODA_SP = { ㄱ: "k", ㄴ: "n", ㄷ: "t", ㄹ: "l", ㅁ: "m", ㅂ: "p", ㅇ: "ng" };
   const EN_CODA_PH = { ㄱ: "k", ㄴ: "n", ㄷ: "t", ㄹ: "l", ㅁ: "m", ㅂ: "p", ㅇ: "N" };
 
+  /* ---------- 5) Korean (VOCALOID Korean phonetic table) ---------- */
+  const KO_V = { ㅏ: "a", ㅑ: "ja", ㅓ: "7", ㅕ: "j7", ㅗ: "o", ㅛ: "jo", ㅜ: "u", ㅠ: "ju", ㅡ: "M", ㅣ: "i", ㅐ: "e", ㅔ: "e", ㅒ: "je", ㅖ: "je", ㅘ: "oa", ㅝ: "u7", ㅙ: "ue", ㅚ: "ue", ㅞ: "ue", ㅟ: "ui", ㅢ: "Mi" };
+  const KO_I = { ㄱ: "g", ㄲ: "g'", ㄴ: "n", ㄷ: "d", ㄸ: "d'", ㄹ: "r", ㅁ: "m", ㅂ: "b", ㅃ: "b'", ㅅ: "s", ㅆ: "s'", ㅇ: "", ㅈ: "c", ㅉ: "c'", ㅊ: "ch", ㅋ: "k", ㅌ: "t", ㅍ: "p", ㅎ: "h" };
+  const KO_F = { ㄱ: "gp", ㄴ: "np", ㄷ: "dp", ㄹ: "rp", ㅁ: "mp", ㅂ: "bp", ㅇ: "Np" };
+  const KO_SH = ["ja", "j7", "jo", "ju", "i", "je", "ui"]; // ㅅ/ㅆ become sh/sh' before these
+  const koPh = (s, prev) => {
+    const v = KO_V[s.vow];
+    let c = KO_I[s.ini];
+    if ((s.ini === "ㅅ" || s.ini === "ㅆ") && KO_SH.includes(v)) c = s.ini === "ㅅ" ? "sh" : "sh'";
+    if (s.ini === "ㄹ" && prev && REP[prev.fin] === "ㄹ") c = "l";        // 달라 → rp + l
+    return [c, v, s.fin ? KO_F[REP[s.fin]] : ""].filter(Boolean).join(" ");
+  };
+
   /* ---------- convert ---------- */
   const convert = (text, o) => {
     const lines = text.split("\n");
@@ -166,6 +179,10 @@
       if (o.rules) applyRules(syls);
       return syls.map((s, i) => {
         const prev = syls[i - 1];
+        if (o.mode === "ko") { // keep the Korean lyric, add pronunciation-rule-aware phonemes
+          const ph = koPh(s, prev);
+          return { src: s.src, lang: "ko", parts: [s.src], ph, notes: [{ t: s.src, ph, lang: "ko" }] };
+        }
         const voiced = !!prev && (!prev.fin || "ㄴㄹㅁㅇ".includes(REP[prev.fin]));
         let [glide, base] = V[s.vow];
         if (s.vow === "ㅢ" && s.ini !== "ㅇ") glide = "";            // 희 → 히
